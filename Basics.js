@@ -82,6 +82,12 @@ let out = "", i = 0;
 for (let i=0; i<10; i++) {
     out += (`${i} `);
 }
+for (let elem of [1, 2, 3]) {
+    console.log(elem);
+}
+for (let idx in [1, 2, 3]) {
+    console.log(idx);
+}
 console.log(out);
 // WHILE
 out = "";
