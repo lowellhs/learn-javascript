@@ -1,15 +1,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const { performance } = require('perf_hooks');
 
 URLS = [
-    'https://introcs.cs.princeton.edu/java/11cheatsheet',
-    'https://introcs.cs.princeton.edu/java/11cheatsheet',
-    'https://introcs.cs.princeton.edu/java/11cheatsheet',
-    'https://introcs.cs.princeton.edu/java/11cheatsheet',
-    'https://introcs.cs.princeton.edu/java/11cheatsheet',
-    'https://introcs.cs.princeton.edu/java/11cheatsheet',
-    'https://introcs.cs.princeton.edu/java/11cheatsheet',
-    'https://introcs.cs.princeton.edu/java/11cheatsheet',
     'https://introcs.cs.princeton.edu/java/11cheatsheet',
     'https://introcs.cs.princeton.edu/java/11cheatsheet',
 ]
@@ -36,18 +29,24 @@ async function scrap(url, scrapper) {
     return scrapper(response.data, url);
 }
 
-// ------- SEQUENTIAL SCRAPING -------
-// (async () => {
-//     urls = [
-//         'https://introcs.cs.princeton.edu/java/11cheatsheet',
-//     ]
-//     result = [];
-//     for (let promise of URLS.map(url => scrap(url, scrapIMG))) {
-//         result.push(await promise);
-//     }
-// })();
+(async () => {
+    t_seq_0 = performance.now();
 
-// ------- PARALLEL SCRAPING -------
-// (async () => {
-//     let result = await Promise.all(URLS.map(url => scrap(url, scrapIMG)));
-// })();
+    result = [];
+    for (let promise of URLS.map(url => scrap(url, scrapIMG))) {
+        result.push(await promise);
+    }
+
+    t_seq_1 = performance.now();
+    console.log("Sequential in", (t_seq_1-t_seq_0)/1000, "s");
+})();
+
+
+(async () => {
+    t_par_0 = performance.now();
+
+    let result = await Promise.all(URLS.map(url => scrap(url, scrapIMG)));
+    
+    t_par_1 = performance.now();
+    console.log("Parallel in", (t_par_1-t_par_0)/1000, "s");
+})();
